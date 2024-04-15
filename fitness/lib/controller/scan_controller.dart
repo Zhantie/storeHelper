@@ -25,6 +25,9 @@ class ScanController extends GetxController {
   var isCameraInitialized = false.obs;
   var cameraCount = 0;
 
+  var x, y, w, h = 0.0;
+  var detectedObjects = [].obs;
+
   initCamera() async {
     if (await Permission.camera.request().isGranted) {
       cameras = await availableCameras();
@@ -38,7 +41,7 @@ class ScanController extends GetxController {
       await cameraController.initialize().then((value) {
         cameraController.startImageStream((image) {
           cameraCount++;
-          if (cameraCount % 10 == 0) {
+          if (cameraCount % 90 == 0) {
             cameraCount = 0;
             objectDetector(image);
           }
@@ -79,7 +82,20 @@ class ScanController extends GetxController {
     );
 
     if (detector != null) {
-      log("Result is: $detector");
+      if (detector.first["confidence"] > 0.96) {
+        log("Result is: $detector");
+        detectedObjects.value = [
+          {
+            "label": detector.first["label"],
+            "confidence": detector.first["confidence"],
+            
+          },
+        ];
+      }
     }
+  }
+
+  getDetectedObjects() {
+    return detectedObjects;
   }
 }

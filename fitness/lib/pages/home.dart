@@ -29,7 +29,7 @@ class HomePage extends StatelessWidget {
               ),
               child: GestureDetector(
                 child: const Text(
-                  'Button',
+                  'Scan Product',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,
@@ -68,7 +68,7 @@ class HomePage extends StatelessWidget {
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.white,
-          hintText: 'Search for recipes',
+          hintText: 'Search for products',
           hintStyle: TextStyle(
             color: Colors.grey[400],
             fontSize: 14,
