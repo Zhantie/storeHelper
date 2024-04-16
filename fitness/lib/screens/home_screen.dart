@@ -1,3 +1,4 @@
+import 'package:fitness/screens/chat_screen.dart';
 import 'package:fitness/views/camera_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,23 +28,51 @@ class HomePage extends StatelessWidget {
                   20.0,
                 ),
               ),
-              child: GestureDetector(
-                child: const Text(
-                  'Scan Product',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CameraView(),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    child: Container(
+                      margin: const EdgeInsets.all(20),
+                      child: const Text(
+                        'Scan Product',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
                     ),
-                  );
-                },
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const CameraView(),
+                        ),
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: Container(
+                      margin: const EdgeInsets.all(20),
+                      child: const Text(
+                        'Supermarket help',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChatScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           ),
