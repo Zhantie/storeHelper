@@ -19,21 +19,22 @@ class HomePage extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          Center(
-            child: Container(
-              padding: const EdgeInsets.all(20.0),
-              decoration: BoxDecoration(
-                color: Colors.blue[500],
-                borderRadius: BorderRadius.circular(
-                  20.0,
-                ),
-              ),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    child: Container(
-                      margin: const EdgeInsets.all(20),
-                      child: const Text(
+          Container(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(
+                        10.0,
+                      ),
+                    ),
+                    child: const Center(
+                      child: Text(
                         'Scan Product',
                         style: TextStyle(
                           color: Colors.white,
@@ -42,19 +43,27 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const CameraView(),
-                        ),
-                      );
-                    },
                   ),
-                  GestureDetector(
-                    child: Container(
-                      margin: const EdgeInsets.all(20),
-                      child: const Text(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CameraView(),
+                      ),
+                    );
+                  },
+                ),
+                GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.circular(
+                        10.0,
+                      ),
+                    ),
+                    child: const Center(
+                      child: Text(
                         'Supermarket help',
                         style: TextStyle(
                           color: Colors.white,
@@ -63,17 +72,17 @@ class HomePage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ChatScreen(),
-                        ),
-                      );
-                    },
                   ),
-                ],
-              ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(),
+                      ),
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         ],
@@ -139,7 +148,7 @@ class HomePage extends StatelessWidget {
   AppBar appBar() {
     return AppBar(
       title: const Text(
-        'Breakfast',
+        'Supermarket help',
         style: TextStyle(
           color: Colors.black,
           fontSize: 18,
