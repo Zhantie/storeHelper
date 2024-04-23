@@ -25,7 +25,6 @@ class ScanController extends GetxController {
   var isCameraInitialized = false.obs;
   var cameraCount = 0;
 
-  var x, y, w, h = 0.0;
   var detectedObjects = [].obs;
 
   initCamera() async {

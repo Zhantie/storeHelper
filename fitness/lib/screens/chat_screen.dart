@@ -1,7 +1,8 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
-import 'package:fitness/constants/api_consts.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
+
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -12,7 +13,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final _openAI = OpenAI.instance.build(
-    token: API_KEY,
+    token: dotenv.env['API_CHATBOT']!,
     baseOption: HttpSetup(
       receiveTimeout: const Duration(seconds: 5),
     ),
