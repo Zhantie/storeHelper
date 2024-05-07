@@ -1,5 +1,8 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
+import 'package:fitness/scaffolds/base_scaffold.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 
@@ -32,14 +35,21 @@ class _ChatScreenState extends State<ChatScreen> {
     lastName: "help",
   );
 
+  List<String> _chipLabels = [
+    "Hulp bij allergieën",
+    "Productlocatie",
+    "Productvoorraad",
+    "Alternatieve producten",
+  ];
+
   List<ChatMessage> _messages = <ChatMessage>[];
   List<ChatUser> _typingUsers = <ChatUser>[];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseScaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlue,
+        backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
           'Albert heijn Assistent',
           style: TextStyle(
@@ -47,18 +57,36 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ),
       ),
-      body: DashChat(
-        currentUser: _currentUser,
-        typingUsers: _typingUsers,
-        messageOptions: const MessageOptions(
-          currentUserContainerColor: Colors.black,
-          containerColor: Colors.blue,
-          textColor: Colors.white,
-        ),
-        onSend: (ChatMessage message) {
-          getChatResponse(message);
-        },
-        messages: _messages,
+      
+      body: Column(
+        children: [
+          // Wrap(
+          //   spacing: 8.0, // gap between adjacent chips
+          //   runSpacing: 4.0, // gap between lines
+          //   children: _chipLabels.map((String label) => Chip(
+          //     label: Text(label),
+          //   )).toList(),
+          // ),
+          Expanded(
+            child: DashChat(
+                currentUser: _currentUser,
+                typingUsers: _typingUsers,
+                messageOptions: MessageOptions(
+                  currentUserContainerColor: Color(0xFF2B2D42),
+                  containerColor: Theme.of(context).primaryColor,
+                  textColor: Colors.white,
+                ),
+                onSend: (ChatMessage message) {
+                  getChatResponse(message);
+                },
+                messages: _messages,
+              ),
+          ),
+          // Expanded(
+          //   child: 
+          // ),
+          
+        ],
       ),
     );
   }
