@@ -1,13 +1,21 @@
-import 'package:fitness/navbar/navbar.dart';
+import 'package:fitness/widgets/navbar/navbar.dart';
 import 'package:flutter/material.dart';
 
 class BaseScaffold extends StatefulWidget {
-  const BaseScaffold(
-      {super.key, required this.body, this.appBar, this.showNavbar = true, });
+  const BaseScaffold({
+    Key? key,
+    required this.body,
+    this.appBar,
+    this.showNavbar = true,
+    this.floatingActionButton,
+    this.floatingActionButtonLocation, // Voeg deze regel toe
+  }) : super(key: key);
 
   final Widget body;
   final AppBar? appBar;
   final bool showNavbar;
+  final FloatingActionButton? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation; // Voeg deze regel toe
 
   @override
   State<BaseScaffold> createState() => _BaseScaffoldState();
@@ -34,12 +42,17 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       extendBody: true,
       appBar: widget.appBar,
       body: widget.body,
-      bottomNavigationBar: widget.showNavbar ? Hero(
-        tag: "navbar",
-        child: Navbar(
-          currentRoute: _currentRoute,
-        ),
-      ) : null,
+      floatingActionButton: widget.floatingActionButton,
+      floatingActionButtonLocation: widget.floatingActionButtonLocation, 
+      resizeToAvoidBottomInset: false,
+      bottomNavigationBar: widget.showNavbar
+          ? Hero(
+              tag: "navbar",
+              child: Navbar(
+                currentRoute: _currentRoute,
+              ),
+            )
+          : null,
     );
   }
 }
