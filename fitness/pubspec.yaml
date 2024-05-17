@@ -26,6 +26,7 @@ dependencies:
   flutter_dotenv:
   carousel_slider: ^4.2.1
   openfoodfacts: ^3.8.0
+  flutter_barcode_scanner: ^2.0.0
 
 dev_dependencies:
   flutter_test:

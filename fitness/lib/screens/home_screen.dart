@@ -1,12 +1,16 @@
+import 'package:fitness/repository/get_product.dart';
 import 'package:fitness/scaffolds/base_scaffold.dart';
+import 'package:fitness/screens/camera/camera_barcode_screen.dart';
 import 'package:fitness/screens/chat_screen.dart';
 import 'package:fitness/views/camera_view.dart';
 import 'package:fitness/widgets/carousel/product_carousel.dart';
 import 'package:fitness/widgets/chips/category_chips.dart';
 import 'package:fitness/widgets/searchfield.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,12 +20,83 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  String _scanResult = '';
+  String? _barcode;
+  String? productName;
+
+  @override
+  void initState() {
+    super.initState();
+    OpenFoodAPIConfiguration.userAgent = UserAgent(
+      name: 'Store helper',
+    );
+  }
+
+  Future<String?> getScanCode() async {
+    try {
+      return await FlutterBarcodeScanner.scanBarcode(
+        '#00B295',
+        'Terug',
+        false,
+        ScanMode.BARCODE,
+      );
+    } catch (e) {
+      print('Error scanning barcode: $e');
+      return null;
+    }
+  }
+
+  void scanCode() async {
+    String? barcodeScanResult = await getScanCode();
+
+    if (barcodeScanResult == null) {
+      print('Barcode scanning failed');
+      return;
+    }
+
+    print('Scanned barcode: $barcodeScanResult');
+    setState(() {
+      _barcode = barcodeScanResult;
+    });
+
+    // Create a ProductQueryConfiguration with the scanned barcode
+    ProductQueryConfiguration configuration = ProductQueryConfiguration(
+      barcodeScanResult,
+      country: OpenFoodFactsCountry.NETHERLANDS,
+      language: OpenFoodFactsLanguage.DUTCH,
+      fields: [ProductField.NAME],
+      version: ProductQueryVersion.v3,
+    );
+
+    // Fetch the product from the Open Food Facts API
+    try {
+      ProductResultV3 result = await OpenFoodAPIClient.getProductV3(configuration);
+
+      // Check if the product was found and store the product information
+      if (result.status == ProductResultV3.statusSuccess && result.product != null) {
+        print('Product found: ${result.product!.productName}');
+        setState(() {
+          productName = result.product!.productName;
+        });
+      } else {
+        print('Product not found');
+        setState(() {
+          productName = 'Product not found';
+        });
+      }
+    } catch (e) {
+      print('Error fetching product: $e');
+      setState(() {
+        productName = 'Error fetching product: $e';
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // Add your onPressed code here!
+          scanCode();
         },
         label: const Text('Scan product'),
         icon: const Icon(Icons.qr_code_scanner),
@@ -87,15 +162,15 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Container(
               alignment: Alignment.topCenter,
               color: Theme.of(context).colorScheme.surface,
-              child: const Column(
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
+                  const Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                     child: CategoryChips(),
                   ),
-                  Padding(
+                  const Padding(
                     padding: EdgeInsets.symmetric(
                       horizontal: 20.0,
                     ),
@@ -107,7 +182,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  ProductCarousel(),
+
+                  //card with product information
+                  Card(
+                    child: Column(
+                      children: [
+                        Text(
+                          productName?.toString() ?? 'Product not found',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
