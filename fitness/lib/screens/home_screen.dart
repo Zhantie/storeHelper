@@ -23,14 +23,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String _scanResult = '';
   String? _barcode;
   String? productName;
-
-  @override
-  void initState() {
-    super.initState();
-    OpenFoodAPIConfiguration.userAgent = UserAgent(
-      name: 'Store helper',
-    );
-  }
+  String? productImage;
+  String? productBrand;
+  String? productQuantitiy;
+  bool isLoading = false;
 
   Future<String?> getScanCode() async {
     try {
@@ -49,6 +45,10 @@ class _HomeScreenState extends State<HomeScreen> {
   void scanCode() async {
     String? barcodeScanResult = await getScanCode();
 
+    setState(() {
+      isLoading = true; // Begin met laden voordat de scan begint
+    });
+
     if (barcodeScanResult == null) {
       print('Barcode scanning failed');
       return;
@@ -64,24 +64,33 @@ class _HomeScreenState extends State<HomeScreen> {
       barcodeScanResult,
       country: OpenFoodFactsCountry.NETHERLANDS,
       language: OpenFoodFactsLanguage.DUTCH,
-      fields: [ProductField.NAME],
+      fields: [
+        ProductField.ALL,
+      ],
       version: ProductQueryVersion.v3,
     );
 
     // Fetch the product from the Open Food Facts API
     try {
-      ProductResultV3 result = await OpenFoodAPIClient.getProductV3(configuration);
+      ProductResultV3 result =
+          await OpenFoodAPIClient.getProductV3(configuration);
 
       // Check if the product was found and store the product information
-      if (result.status == ProductResultV3.statusSuccess && result.product != null) {
+      if (result.status == ProductResultV3.statusSuccess &&
+          result.product != null) {
         print('Product found: ${result.product!.productName}');
         setState(() {
+          isLoading = false;
           productName = result.product!.productName;
+          productImage = result.product!.imageFrontUrl;
+          productBrand = result.product!.brands;
+          productQuantitiy = result.product!.quantity;
         });
       } else {
         print('Product not found');
         setState(() {
           productName = 'Product not found';
+          isLoading = false;
         });
       }
     } catch (e) {
@@ -91,6 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
@@ -175,7 +185,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       horizontal: 20.0,
                     ),
                     child: Text(
-                      'Populaire producten',
+                      'Scanned product',
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -184,16 +194,68 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
 
                   //card with product information
-                  Card(
-                    child: Column(
-                      children: [
-                        Text(
-                          productName?.toString() ?? 'Product not found',
-                          style: TextStyle(
-                            fontSize: 16.0,
-                          ),
-                        ),
-                      ],
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: SizedBox(
+                      height: 150, // Stel de gewenste hoogte in
+                      child: isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              elevation: 10,
+                              child: Row(
+                                children: [
+                                  if (productImage != null)
+                                    ClipRRect(
+                                        borderRadius: const BorderRadius.only(
+                                          topLeft: Radius.circular(10.0),
+                                          bottomLeft: Radius.circular(10.0),
+                                        ),
+                                        child: Image.network(productImage!))
+                                  else
+                                    const Padding(
+                                      padding: EdgeInsets.only(right: 8.0),
+                                    ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            productName?.toString() ?? '',
+                                            style: const TextStyle(
+                                              fontSize: 18.0,
+                                            ),
+                                          ),
+                                          Text(
+                                            productQuantitiy?.toString() ?? '',
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .secondary
+                                                  .withAlpha(
+                                                    150,
+                                                  ),
+                                            ),
+                                          ),
+                                          Text(
+                                            productBrand?.toString() ?? '',
+                                            style: const TextStyle(
+                                              fontSize: 16.0,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                     ),
                   ),
                 ],

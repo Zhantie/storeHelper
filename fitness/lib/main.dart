@@ -5,10 +5,13 @@ import 'package:fitness/screens/recipe_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:openfoodfacts/openfoodfacts.dart';
 
 Future<void> main() async {
   await dotenv.load(fileName: ".env");
-
+  OpenFoodAPIConfiguration.userAgent = UserAgent(
+    name: 'Store helper',
+  );
   runApp(const MyApp());
 }
 
