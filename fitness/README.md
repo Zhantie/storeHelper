@@ -5,8 +5,6 @@ Store Helper is een app dat in ontwikkeling is om de winkel ervaring van klanten
 In deze Readme laat ik Poc's zien waarbij ik ook code snippets weergeef
 
 ## Poc Product herkenning
-Voor deze poc wilde ik producten laten herkennen doormiddel van je camera
-
 
 https://github.com/Zhantie/fitnessApp/assets/74553048/c565f3c9-ade1-4b66-956a-0e43834b3452
 
