@@ -105,9 +105,11 @@ Future<String?> getScanCode() async {
 ```
 
 ### OpenFoodFacts & Ophalen scanned barcode
-Voor mijn Barcode scanner POC heb ik gebruik gemaakt van de "OpenFoodFacts" API. Hiervoor was ook een package beschikbaar voor Flutter.
+In deze code worden barcodes gescand en wordt productinformatie opgehaald via de Open Food Facts API. De functie `scanCode` begint met het scannen van een barcode door de `getScanCode` functie aan te roepen. De status `isLoading` wordt bijgewerkt om aan te geven dat de app bezig is met het verwerken van de scan. Als het scannen mislukt, wordt een foutmelding weergegeven. Anders wordt de gescande barcode afgedrukt en opgeslagen in `_barcode`.
 
-``dart
+Vervolgens wordt een `ProductQueryConfiguration` gemaakt met de gescande barcode, waarbij Nederland als land en Nederlands als taal is ingesteld. De OpenFoodFacts API wordt aangeroepen om productinformatie op te halen. Als het product succesvol wordt gevonden, worden de productdetails (naam, afbeelding, merk, hoeveelheid) opgeslagen en weergegeven. Als het product niet wordt gevonden, wordt een melding weergegeven dat het product niet is gevonden. Bij een fout tijdens het ophalen van het product, wordt een foutmelding weergegeven en opgeslagen.
+
+```dart
  void scanCode() async {
     String? barcodeScanResult = await getScanCode();
 
@@ -169,18 +171,4 @@ Voor mijn Barcode scanner POC heb ik gebruik gemaakt van de "OpenFoodFacts" API.
 ```
 
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
 
