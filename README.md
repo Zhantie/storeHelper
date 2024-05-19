@@ -4,10 +4,12 @@ Store Helper is een app dat in ontwikkeling is om de winkel ervaring van klanten
 
 In deze Readme laat ik Poc's zien waarbij ik ook code snippets weergeef
 
+* POC TensorFlow 
+* POC Chatbot
+* Barcode Scanner
+
 ## Poc Product herkenning
-
 https://github.com/Zhantie/fitnessApp/assets/74553048/c565f3c9-ade1-4b66-956a-0e43834b3452
-
 
 ### initCamera
 In deze functie wordt de camera geïnitialiseerd. Eerst wordt gecontroleerd of de gebruiker toestemming heeft gegeven. Vervolgens wordt een beeldstream gestart en gecontroleerd op objectherkenning. In mijn geval worden een appel en banaan gedetecteerd door het getrainde model.
