@@ -1,15 +1,8 @@
-import 'package:fitness/repository/get_product.dart';
 import 'package:fitness/scaffolds/base_scaffold.dart';
-import 'package:fitness/screens/camera/camera_barcode_screen.dart';
-import 'package:fitness/screens/chat_screen.dart';
-import 'package:fitness/views/camera_view.dart';
-import 'package:fitness/widgets/carousel/product_carousel.dart';
 import 'package:fitness/widgets/chips/category_chips.dart';
 import 'package:fitness/widgets/searchfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:openfoodfacts/openfoodfacts.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -104,6 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
+      resizeToAvoidBottomInset: false,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           scanCode();
@@ -132,40 +126,38 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Column(
         children: [
           Container(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primary,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              bottom: 20.0,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Welcome',
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).colorScheme.surface,
+                  ),
                 ),
-              ),
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-                bottom: 20.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome',
-                    style: TextStyle(
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
+                Text(
+                  'Zoek product informatie op',
+                  style: TextStyle(
+                    fontSize: 18.0,
+                    color: Theme.of(context).colorScheme.surface,
                   ),
-                  Text(
-                    'Zoek product informatie op',
-                    style: TextStyle(
-                      fontSize: 18.0,
-                      color: Theme.of(context).colorScheme.surface,
-                    ),
-                  ),
-                  const Searchfield(),
-                ],
-              ),
+                ),
+                const Searchfield(),
+              ],
             ),
           ),
           Expanded(
@@ -197,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20.0),
                     child: SizedBox(
-                      height: 150, // Stel de gewenste hoogte in
+                      height: 150,
                       child: isLoading
                           ? const Center(child: CircularProgressIndicator())
                           : Card(
@@ -209,18 +201,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                 children: [
                                   if (productImage != null)
                                     ClipRRect(
-                                        borderRadius: const BorderRadius.only(
-                                          topLeft: Radius.circular(10.0),
-                                          bottomLeft: Radius.circular(10.0),
+                                      borderRadius: const BorderRadius.only(
+                                        topLeft: Radius.circular(
+                                          10.0,
                                         ),
-                                        child: Image.network(productImage!))
+                                        bottomLeft: Radius.circular(
+                                          10.0,
+                                        ),
+                                      ),
+                                      child: Image.network(
+                                        productImage!,
+                                      ),
+                                    )
                                   else
                                     const Padding(
-                                      padding: EdgeInsets.only(right: 8.0),
+                                      padding: EdgeInsets.only(
+                                        right: 8.0,
+                                      ),
                                     ),
                                   Expanded(
                                     child: Padding(
-                                      padding: const EdgeInsets.all(15.0),
+                                      padding: const EdgeInsets.all(
+                                        15.0,
+                                      ),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,

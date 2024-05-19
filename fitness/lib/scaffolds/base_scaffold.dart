@@ -3,19 +3,21 @@ import 'package:flutter/material.dart';
 
 class BaseScaffold extends StatefulWidget {
   const BaseScaffold({
-    Key? key,
+    super.key,
     required this.body,
     this.appBar,
     this.showNavbar = true,
     this.floatingActionButton,
-    this.floatingActionButtonLocation, // Voeg deze regel toe
-  }) : super(key: key);
+    this.floatingActionButtonLocation,
+    this.resizeToAvoidBottomInset = true, 
+  });
 
+  final bool resizeToAvoidBottomInset;
   final Widget body;
   final AppBar? appBar;
   final bool showNavbar;
   final FloatingActionButton? floatingActionButton;
-  final FloatingActionButtonLocation? floatingActionButtonLocation; // Voeg deze regel toe
+  final FloatingActionButtonLocation? floatingActionButtonLocation; 
 
   @override
   State<BaseScaffold> createState() => _BaseScaffoldState();
@@ -44,7 +46,7 @@ class _BaseScaffoldState extends State<BaseScaffold> {
       body: widget.body,
       floatingActionButton: widget.floatingActionButton,
       floatingActionButtonLocation: widget.floatingActionButtonLocation, 
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: widget.resizeToAvoidBottomInset,
       bottomNavigationBar: widget.showNavbar
           ? Hero(
               tag: "navbar",

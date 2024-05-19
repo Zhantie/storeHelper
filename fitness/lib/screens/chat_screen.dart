@@ -1,8 +1,6 @@
 import 'package:chat_gpt_sdk/chat_gpt_sdk.dart';
 import 'package:dash_chat_2/dash_chat_2.dart';
 import 'package:fitness/scaffolds/base_scaffold.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
 
@@ -35,19 +33,14 @@ class _ChatScreenState extends State<ChatScreen> {
     lastName: "help",
   );
 
-  List<String> _chipLabels = [
-    "Hulp bij allergieën",
-    "Productlocatie",
-    "Productvoorraad",
-    "Alternatieve producten",
-  ];
 
-  List<ChatMessage> _messages = <ChatMessage>[];
-  List<ChatUser> _typingUsers = <ChatUser>[];
+  final List<ChatMessage> _messages = <ChatMessage>[];
+  final List<ChatUser> _typingUsers = <ChatUser>[];
 
   @override
   Widget build(BuildContext context) {
     return BaseScaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: const Text(
@@ -60,19 +53,12 @@ class _ChatScreenState extends State<ChatScreen> {
       
       body: Column(
         children: [
-          // Wrap(
-          //   spacing: 8.0, // gap between adjacent chips
-          //   runSpacing: 4.0, // gap between lines
-          //   children: _chipLabels.map((String label) => Chip(
-          //     label: Text(label),
-          //   )).toList(),
-          // ),
           Expanded(
             child: DashChat(
                 currentUser: _currentUser,
                 typingUsers: _typingUsers,
                 messageOptions: MessageOptions(
-                  currentUserContainerColor: Color(0xFF2B2D42),
+                  currentUserContainerColor: const Color(0xFF2B2D42),
                   containerColor: Theme.of(context).primaryColor,
                   textColor: Colors.white,
                 ),
@@ -82,10 +68,6 @@ class _ChatScreenState extends State<ChatScreen> {
                 messages: _messages,
               ),
           ),
-          // Expanded(
-          //   child: 
-          // ),
-          
         ],
       ),
     );
@@ -96,7 +78,7 @@ class _ChatScreenState extends State<ChatScreen> {
       _messages.insert(0, message);
       _typingUsers.add(_gptChatUser);
     });
-    List<Messages> _messagesHistory = _messages.reversed.map((message) {
+    List<Messages> messagesHistory = _messages.reversed.map((message) {
       if (message.user == _currentUser) {
         return Messages(
           role: Role.user,
@@ -115,7 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
           role: Role.assistant,
           content: 'Als assistent binnen Albert Heijn bij filiaal Albert Heijn Buurmalseplein weet jij alles te vinden en ken jij alle locaties van elk product. Het is van cruciaal belang om vragen buiten deze scope niet te beantwoorden. Het is belangrijk om kort, snel en duidelijk te reageren, maar wel op een klantvriendelijke manier. Als een klant specifiek vraagt naar een product, leg je het bijvoorbeeld uit als gangpad 4, links, meter 2, 3e plank. Als een klant vraagt waar hij of zij een product kan vinden, leg je eerst uit waar het product zich bevindt. Als de klant aangeeft het niet te kunnen vinden, verwijs je pas door naar een medewerker. Voor allergieën geef je kort aan of het product veilig is en bied je indien mogelijk alternatieven aan. Als een product niet op voorraad is, geef je de reden, zoals een foutieve levering, kwaliteitsproblemen of een slechte oogst. Houd je antwoorden kort en vriendelijk, om efficiënt te blijven binnen de kosten per token. Vergeet niet dat het heel belangrijk is om vragen buiten deze scope niet te beantwoorden.',
         ).toJson(),
-        ..._messagesHistory.map((message) => message.toJson()).toList(),
+        ...messagesHistory.map((message) => message.toJson()).toList(),
       ],
       // messages: _messagesHistory.map((message) => message.toJson()).toList(),
       maxToken: 200,
