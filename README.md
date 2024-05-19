@@ -6,7 +6,7 @@ In deze Readme laat ik Poc's zien waarbij ik ook code snippets weergeef
 
 * POC TensorFlow 
 * POC Chatbot
-* Barcode Scanner
+* POC Barcode Scanner
 
 ## Poc Product herkenning
 https://github.com/Zhantie/fitnessApp/assets/74553048/c565f3c9-ade1-4b66-956a-0e43834b3452
