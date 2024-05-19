@@ -84,11 +84,89 @@ initTFLite() async {
 
 ## Poc Chatbot
 ## Poc Barcode scanner
-
 https://github.com/Zhantie/fitnessApp/assets/74553048/833f3d0b-7622-4aaf-8a82-9b4719354e38
 
+### Barcode scanner
+Voor mijn barcode scanner heb ik gebruik gemaakt van de `flutter_barcode_scanner: ^2.0.0` package. In de getScanCode functie heb ik enkele aanpassingen gedaan aan de scanner pagina. De kleur van de scanner balk is ingesteld op `#00B295` en de flits functie is uitgeschakeld, zodat deze niet gebruikt kan worden.
+```dart
+Future<String?> getScanCode() async {
+    try {
+      return await FlutterBarcodeScanner.scanBarcode(
+        '#00B295',
+        'Terug',
+        false,
+        ScanMode.BARCODE,
+      );
+    } catch (e) {
+      print('Error scanning barcode: $e');
+      return null;
+    }
+  }
+```
 
+### OpenFoodFacts & Ophalen scanned barcode
+Voor mijn Barcode scanner POC heb ik gebruik gemaakt van de "OpenFoodFacts" API. Hiervoor was ook een package beschikbaar voor Flutter.
 
+``dart
+ void scanCode() async {
+    String? barcodeScanResult = await getScanCode();
+
+    setState(() {
+      isLoading = true; // Begin met laden voordat de scan begint
+    });
+
+    if (barcodeScanResult == null) {
+      print('Barcode scanning failed');
+      return;
+    }
+
+    print('Scanned barcode: $barcodeScanResult');
+    setState(() {
+      _barcode = barcodeScanResult;
+    });
+
+    // Create a ProductQueryConfiguration with the scanned barcode
+    ProductQueryConfiguration configuration = ProductQueryConfiguration(
+      barcodeScanResult,
+      country: OpenFoodFactsCountry.NETHERLANDS,
+      language: OpenFoodFactsLanguage.DUTCH,
+      fields: [
+        ProductField.ALL,
+      ],
+      version: ProductQueryVersion.v3,
+    );
+
+    // Fetch the product from the Open Food Facts API
+    try {
+      ProductResultV3 result =
+          await OpenFoodAPIClient.getProductV3(configuration);
+
+      // Check if the product was found and store the product information
+      if (result.status == ProductResultV3.statusSuccess &&
+          result.product != null) {
+        print('Product found: ${result.product!.productName}');
+        setState(() {
+          isLoading = false;
+          productName = result.product!.productName;
+          productImage = result.product!.imageFrontUrl;
+          productBrand = result.product!.brands;
+          productQuantitiy = result.product!.quantity;
+        });
+      } else {
+        print('Product not found');
+        setState(() {
+          productName = 'Product not found';
+          isLoading = false;
+        });
+      }
+    } catch (e) {
+      print('Error fetching product: $e');
+      setState(() {
+        productName = 'Error fetching product: $e';
+      });
+    }
+  }
+```
 
 
 A new Flutter project.
