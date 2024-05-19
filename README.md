@@ -83,6 +83,9 @@ initTFLite() async {
 ```
 
 ## Poc Chatbot
+https://github.com/Zhantie/fitnessApp/assets/74553048/7b3ceeb5-f5ad-4ea9-8655-5190c8310105
+
+
 ## Poc Barcode scanner
 https://github.com/Zhantie/fitnessApp/assets/74553048/833f3d0b-7622-4aaf-8a82-9b4719354e38
 
