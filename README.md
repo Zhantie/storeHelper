@@ -1,6 +1,6 @@
 # Store helper
 
-Store Helper is een app dat in ontwikkeling is om de winkel ervaring van klanten binnen een winkel kan verbeteren.
+Store Helper is een app dat in ontwikkeling is om de winkel ervaring van klanten binnen een winkel te verbeteren.
 
 In deze Readme laat ik Poc's zien waarbij ik ook code snippets weergeef
 
