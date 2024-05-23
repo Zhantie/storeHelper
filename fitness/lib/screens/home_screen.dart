@@ -157,11 +157,26 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Expanded(
             child: Container(
+              margin: const EdgeInsets.only(
+                top: 10.0,
+              ),
               alignment: Alignment.topCenter,
               color: Theme.of(context).colorScheme.surface,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                    ),
+                    child: Text(
+                      'Allergens',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20.0,

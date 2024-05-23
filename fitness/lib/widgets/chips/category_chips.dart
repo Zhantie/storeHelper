@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class CategoryChips extends StatefulWidget {
   final Function(List<String>) onSelectionChanged;
@@ -16,9 +17,9 @@ class _CategoryChipsState extends State<CategoryChips> {
     'Milk',
   ];
 
-  final Map<String, IconData> _categoryIcons = {
-    "Eggs": Icons.texture_sharp,
-    'Milk': Icons.texture_sharp,
+  final Map<String, FaIcon> _categoryIcons = {
+    "Eggs": const FaIcon(FontAwesomeIcons.egg),
+    'Milk': const FaIcon(FontAwesomeIcons.glassWhiskey),
   };
 
   List<String> selectedCategories = [];
@@ -36,7 +37,7 @@ class _CategoryChipsState extends State<CategoryChips> {
               elevation: 4.0,
               showCheckmark: false,
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: Colors.transparent),
+                side: BorderSide(color: Colors.grey.shade400),
                 borderRadius: BorderRadius.circular(4.0),
               ),
               selectedColor: Theme.of(context).colorScheme.secondary,
@@ -49,7 +50,7 @@ class _CategoryChipsState extends State<CategoryChips> {
                 ),
               ),
               avatar: Icon(
-                _categoryIcons[category],
+                _categoryIcons[category]?.icon,
                 color: selectedCategories.contains(category)
                     ? Colors.white
                     : Colors.black,

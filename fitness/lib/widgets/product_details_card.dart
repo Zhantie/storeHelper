@@ -18,7 +18,9 @@ class ProductDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0),
+        borderRadius: BorderRadius.circular(
+          10.0,
+        ),
       ),
       elevation: 10,
       child: Row(
@@ -26,30 +28,41 @@ class ProductDetailsCard extends StatelessWidget {
           if (productImage != null)
             ClipRRect(
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(10.0),
-                bottomLeft: Radius.circular(10.0),
+                topLeft: Radius.circular(
+                  10.0,
+                ),
+                bottomLeft: Radius.circular(
+                  10.0,
+                ),
               ),
-              child: Image.network(productImage!),
+              child: Image.network(
+                productImage!,
+              ),
             )
           else
-            const Padding(
-              padding: EdgeInsets.only(right: 8.0),
-            ),
+            Text('No product scanned'),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(
+                15.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     productName ?? '',
-                    style: const TextStyle(fontSize: 18.0),
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                    ),
                   ),
                   Text(
                     productQuantitiy ?? '',
                     style: TextStyle(
                       fontSize: 16.0,
-                      color: Theme.of(context).colorScheme.secondary.withAlpha(150),
+                      color: Theme.of(context)
+                          .colorScheme
+                          .secondary
+                          .withAlpha(150),
                     ),
                   ),
                   Text(
