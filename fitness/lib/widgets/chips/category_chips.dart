@@ -1,32 +1,27 @@
 import 'package:flutter/material.dart';
 
 class CategoryChips extends StatefulWidget {
-  const CategoryChips({Key? key}) : super(key: key);
+  final Function(List<String>) onSelectionChanged;
+
+  const CategoryChips({Key? key, required this.onSelectionChanged})
+      : super(key: key);
 
   @override
   _CategoryChipsState createState() => _CategoryChipsState();
 }
 
 class _CategoryChipsState extends State<CategoryChips> {
-  final List<String> _categories = [
-    'Groenten',
-    'Fruit',
-    'Vlees',
-    'Zuivel',
-    'Bakkerij',
-    'Dranken',
+  final List<String> categoriesAllergen = [
+    "Eggs",
+    'Milk',
   ];
 
   final Map<String, IconData> _categoryIcons = {
-    'Groenten': Icons.local_florist,
-    'Fruit': Icons.shopping_basket,
-    'Vlees': Icons.fastfood,
-    'Zuivel': Icons.local_drink,
-    'Bakkerij': Icons.bakery_dining,
-    'Dranken': Icons.local_bar,
+    "Eggs": Icons.texture_sharp,
+    'Milk': Icons.texture_sharp,
   };
 
-  List<String> _selectedCategories = [];
+  List<String> selectedCategories = [];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +29,7 @@ class _CategoryChipsState extends State<CategoryChips> {
       height: 50.0,
       child: ListView(
         scrollDirection: Axis.horizontal,
-        children: _categories.map((String category) {
+        children: categoriesAllergen.map((String category) {
           return Padding(
             padding: const EdgeInsets.all(4.0),
             child: FilterChip(
@@ -48,27 +43,28 @@ class _CategoryChipsState extends State<CategoryChips> {
               label: Text(
                 category,
                 style: TextStyle(
-                  color: _selectedCategories.contains(category)
+                  color: selectedCategories.contains(category)
                       ? Colors.white
                       : Colors.black,
                 ),
               ),
               avatar: Icon(
                 _categoryIcons[category],
-                color: _selectedCategories.contains(category)
+                color: selectedCategories.contains(category)
                     ? Colors.white
                     : Colors.black,
               ),
-              selected: _selectedCategories.contains(category),
               onSelected: (bool selected) {
                 setState(() {
                   if (selected) {
-                    _selectedCategories.add(category);
+                    selectedCategories.add(category);
                   } else {
-                    _selectedCategories.remove(category);
+                    selectedCategories.remove(category);
                   }
                 });
+                widget.onSelectionChanged(selectedCategories);
               },
+              selected: selectedCategories.contains(category),
             ),
           );
         }).toList(),

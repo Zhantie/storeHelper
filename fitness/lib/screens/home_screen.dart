@@ -19,7 +19,10 @@ class _HomeScreenState extends State<HomeScreen> {
   String? productImage;
   String? productBrand;
   String? productQuantitiy;
+  String? productAllergens;
   bool isLoading = false;
+
+  List<String> selectedAllergens = [];
 
   Future<String?> getScanCode() async {
     try {
@@ -78,7 +81,20 @@ class _HomeScreenState extends State<HomeScreen> {
           productImage = result.product!.imageFrontUrl;
           productBrand = result.product!.brands;
           productQuantitiy = result.product!.quantity;
+          productAllergens = result.product!.allergens!.names.join(', ');
         });
+
+        // Check for allergens
+        if (selectedAllergens.isNotEmpty && productAllergens != null) {
+          for (var allergen in selectedAllergens) {
+            if (productAllergens!
+                .toLowerCase()
+                .contains(allergen.toLowerCase())) {
+              showAllergenAlert(allergen);
+              break;
+            }
+          }
+        }
       } else {
         print('Product not found');
         setState(() {
@@ -92,6 +108,33 @@ class _HomeScreenState extends State<HomeScreen> {
         productName = 'Error fetching product: $e';
       });
     }
+  }
+
+  // shows allert dialog when allergen is found
+  void showAllergenAlert(String allergen) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Waarschuwing!'),
+          content: Text('Dit product bevat allergenen: $allergen'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void handleSelectionChanged(List<String> selected) {
+    setState(() {
+      selectedAllergens = selected;
+    });
   }
 
   @override
@@ -160,6 +203,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
+          
           Expanded(
             child: Container(
               alignment: Alignment.topCenter,
@@ -167,10 +211,13 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                    child: CategoryChips(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 10.0,
+                    ),
+                    child: CategoryChips(
+                        onSelectionChanged: handleSelectionChanged),
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(
@@ -187,7 +234,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   //card with product information
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                    ),
                     child: SizedBox(
                       height: 150,
                       child: isLoading
