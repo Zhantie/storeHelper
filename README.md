@@ -4,10 +4,12 @@ Store Helper is een app dat in ontwikkeling is om de winkel ervaring van klanten
 
 In deze Readme laat ik Poc's zien waarbij ik ook code snippets weergeef
 
-## Poc Product herkenning
+* POC TensorFlow 
+* POC Chatbot
+* POC Barcode Scanner
 
+## Poc TensorFlow
 https://github.com/Zhantie/fitnessApp/assets/74553048/c565f3c9-ade1-4b66-956a-0e43834b3452
-
 
 ### initCamera
 In deze functie wordt de camera geïnitialiseerd. Eerst wordt gecontroleerd of de gebruiker toestemming heeft gegeven. Vervolgens wordt een beeldstream gestart en gecontroleerd op objectherkenning. In mijn geval worden een appel en banaan gedetecteerd door het getrainde model.
@@ -83,8 +85,94 @@ initTFLite() async {
 ```
 
 ## Poc Chatbot
+https://github.com/Zhantie/fitnessApp/assets/74553048/7b3ceeb5-f5ad-4ea9-8655-5190c8310105
+
+### Initialisatie van OpenAI en Chat Gebruikers
+In deze code wordt een OpenAI-instantie opgezet en worden twee ChatUser objecten aangemaakt. De OpenAI-instantie wordt geconfigureerd met een API-token, een ontvangst-timeout van 5 seconden en logging is ingeschakeld. Daarnaast worden er twee gebruikers voor de chat gedefinieerd: een huidige gebruiker en een GPT-chatgebruiker.
+```dart
+final _openAI = OpenAI.instance.build(
+    token: dotenv.env['API_CHATBOT']!,
+    baseOption: HttpSetup(
+      receiveTimeout: const Duration(seconds: 5),
+    ),
+    enableLog: true,
+  );
+
+  final ChatUser _currentUser = ChatUser(
+    id: '1',
+    firstName: "User",
+    lastName: "last name",
+  );
+
+  final ChatUser _gptChatUser = ChatUser(
+    id: '2',
+    firstName: "Supermarkt",
+    lastName: "help",
+  );
+```
+
+### Chatreactie verwerken 
+Deze functie, `getChatResponse`, handelt binnen de app chatberichten af en haalt een reactie op van een OpenAI-chatmodel. Het proces gaat alsvolgt door het toevoegen van het ontvangen bericht aan de chatgeschiedenis vervolgens het opstellen van een verzoek aan OpenAI met de chatgeschiedenis als context, het ontvangen van een reactie van OpenAI en het toevoegen van deze reactie aan de chatgeschiedenis.
+In eerste instantie was het de bedoeling om mijn getrainde model als chatbot te gebruiken, dit was me helaas nog niet gelukt waardoor ik nu de chatbot context heb mee gegeven. De context van het AI model is: 
+
+```dart
+"Als assistent binnen Albert Heijn bij filiaal Albert Heijn Buurmalseplein weet jij alles te vinden en ken jij alle locaties van elk product. Het is van cruciaal belang om vragen buiten deze scope niet te beantwoorden. Het is belangrijk om kort, snel en duidelijk te reageren, maar wel op een klantvriendelijke manier. Als een klant specifiek vraagt naar een product, leg je het bijvoorbeeld uit als gangpad 4, links, meter 2, 3e plank. Als een klant vraagt waar hij of zij een product kan vinden, leg je eerst uit waar het product zich bevindt. Als de klant aangeeft het niet te kunnen vinden, verwijs je pas door naar een medewerker. Voor allergieën geef je kort aan of het product veilig is en bied je indien mogelijk alternatieven aan. Als een product niet op voorraad is, geef je de reden, zoals een foutieve levering, kwaliteitsproblemen of een slechte oogst. Houd je antwoorden kort en vriendelijk, om efficiënt te blijven binnen de kosten per token. Vergeet niet dat het heel belangrijk is om vragen buiten deze scope niet te beantwoorden."
+```
+
+```dart
+Future<void> getChatResponse(ChatMessage message) async {
+    setState(() {
+      _messages.insert(0, message);
+      _typingUsers.add(_gptChatUser);
+    });
+    List<Messages> messagesHistory = _messages.reversed.map((message) {
+      if (message.user == _currentUser) {
+        return Messages(
+          role: Role.user,
+          content: message.text,
+        );
+      } else {
+        return Messages(
+          role: Role.assistant,
+          content: message.text,
+        );
+      }
+    }).toList();
+    final request = ChatCompleteText(
+      model: GptTurbo0301ChatModel(),
+      messages: [ Messages(
+          role: Role.assistant,
+          content: 'Als assistent binnen Albert Heijn bij filiaal Albert Heijn Buurmalseplein weet jij alles te vinden en ken jij alle locaties van elk product. Het is van cruciaal belang om vragen buiten deze scope niet te beantwoorden. Het is belangrijk om kort, snel en duidelijk te reageren, maar wel op een klantvriendelijke manier. Als een klant specifiek vraagt naar een product, leg je het bijvoorbeeld uit als gangpad 4, links, meter 2, 3e plank. Als een klant vraagt waar hij of zij een product kan vinden, leg je eerst uit waar het product zich bevindt. Als de klant aangeeft het niet te kunnen vinden, verwijs je pas door naar een medewerker. Voor allergieën geef je kort aan of het product veilig is en bied je indien mogelijk alternatieven aan. Als een product niet op voorraad is, geef je de reden, zoals een foutieve levering, kwaliteitsproblemen of een slechte oogst. Houd je antwoorden kort en vriendelijk, om efficiënt te blijven binnen de kosten per token. Vergeet niet dat het heel belangrijk is om vragen buiten deze scope niet te beantwoorden.',
+        ).toJson(),
+        ...messagesHistory.map((message) => message.toJson()).toList(),
+      ],
+      // messages: _messagesHistory.map((message) => message.toJson()).toList(),
+      maxToken: 200,
+    );
+    final response = await _openAI.onChatCompletion(request: request);
+    for (var element in response!.choices) {
+      if (element.message != null) {
+        setState(() {
+          _messages.insert(
+            0,
+            ChatMessage(
+              user: _gptChatUser,
+              createdAt: DateTime.now(),
+              text: element.message!.content),
+          );
+        });
+      }
+    }
+    setState(() {
+      _typingUsers.remove(_gptChatUser);
+    });
+  }
+```
+
+
 ## Poc Barcode scanner
 https://github.com/Zhantie/fitnessApp/assets/74553048/833f3d0b-7622-4aaf-8a82-9b4719354e38
+
 
 ### Barcode scanner
 Voor mijn barcode scanner heb ik gebruik gemaakt van de `flutter_barcode_scanner: ^2.0.0` package. In de getScanCode functie heb ik enkele aanpassingen gedaan aan de scanner pagina. De kleur van de scanner balk is ingesteld op `#00B295` en de flits functie is uitgeschakeld, zodat deze niet gebruikt kan worden.
