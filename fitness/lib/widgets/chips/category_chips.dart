@@ -15,11 +15,27 @@ class _CategoryChipsState extends State<CategoryChips> {
   final List<String> categoriesAllergen = [
     "Eggs",
     'Milk',
+    "Gluten",
+    "Nuts",
+    "Peanuts",
+    "Sesame-seeds",
+    "Soybeans",
+    "Celery",
+    "Mustard",
+    "Fish",
   ];
 
   final Map<String, FaIcon> _categoryIcons = {
     "Eggs": const FaIcon(FontAwesomeIcons.egg),
     'Milk': const FaIcon(FontAwesomeIcons.glassWhiskey),
+    "Gluten": const FaIcon(FontAwesomeIcons.breadSlice),
+    "Nuts": const FaIcon(FontAwesomeIcons.disease),
+    "Peanuts": const FaIcon(FontAwesomeIcons.disease),
+    "Sesame-seeds": const FaIcon(FontAwesomeIcons.seedling),
+    "Soybeans": const FaIcon(FontAwesomeIcons.seedling),
+    "Celery": const FaIcon(FontAwesomeIcons.leaf),
+    "Mustard": const FaIcon(FontAwesomeIcons.bottleDroplet),
+    "Fish": const FaIcon(FontAwesomeIcons.fish),
   };
 
   List<String> selectedCategories = [];

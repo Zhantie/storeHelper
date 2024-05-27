@@ -28,9 +28,11 @@ class ProductScanner {
     );
 
     try {
-      ProductResultV3 result = await OpenFoodAPIClient.getProductV3(configuration);
+      ProductResultV3 result =
+          await OpenFoodAPIClient.getProductV3(configuration);
 
-      if (result.status == ProductResultV3.statusSuccess && result.product != null) {
+      if (result.status == ProductResultV3.statusSuccess &&
+          result.product != null) {
         return {
           'name': result.product!.productName ?? '',
           'image': result.product!.imageFrontUrl ?? '',
@@ -47,4 +49,5 @@ class ProductScanner {
       return null;
     }
   }
+
 }

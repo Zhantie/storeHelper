@@ -1,4 +1,5 @@
 import 'package:fitness/controller/product_scanner.dart';
+import 'package:fitness/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:fitness/scaffolds/base_scaffold.dart';
 import 'package:fitness/widgets/chips/category_chips.dart';
@@ -23,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoading = false;
 
   List<String> selectedAllergens = [];
+  List<Map<String, String?>> scannedProducts = [];
 
   void scanCode() async {
     setState(() {
@@ -53,6 +55,13 @@ class _HomeScreenState extends State<HomeScreen> {
           productBrand = result['brand'];
           productQuantitiy = result['quantity'];
           productAllergens = result['allergens'];
+
+          scannedProducts.add({
+            'name': productName,
+            'image': productImage,
+            'brand': productBrand,
+            'quantity': productQuantitiy,
+          });
         });
 
         // Check for allergens
@@ -118,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
       ),
-      body: Column(
+      body: ListView(
         children: [
           Container(
             decoration: BoxDecoration(
@@ -155,66 +164,96 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          Expanded(
-            child: Container(
-              margin: const EdgeInsets.only(
-                top: 10.0,
-              ),
-              alignment: Alignment.topCenter,
-              color: Theme.of(context).colorScheme.surface,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                    ),
-                    child: Text(
-                      'Allergens',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+          Container(
+            margin: const EdgeInsets.only(
+              top: 10.0,
+            ),
+            alignment: Alignment.topCenter,
+            color: Theme.of(context).colorScheme.surface,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                  ),
+                  child: Text(
+                    'Allergens',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 10.0,
-                    ),
-                    child: CategoryChips(
-                        onSelectionChanged: handleSelectionChanged),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 10.0,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                    ),
-                    child: Text(
-                      'Scanned product',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  child: CategoryChips(
+                      onSelectionChanged: handleSelectionChanged),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                    ),
-                    child: SizedBox(
-                      height: 150,
-                      child: isLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : ProductDetailsCard(
-                              productName: productName,
-                              productImage: productImage,
-                              productBrand: productBrand,
-                              productQuantitiy: productQuantitiy,
-                            ),
+                  child: Text(
+                    'Scanned product',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                  ),
+                  child: SizedBox(
+                    height: 150,
+                    child: isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : ProductDetailsCard(
+                            productName: productName,
+                            productImage: productImage,
+                            productBrand: productBrand,
+                            productQuantitiy: productQuantitiy,
+                          ),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                  ),
+                  child: Text(
+                    'Recent scans',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: GridView.count(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    physics: const ScrollPhysics(),
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    mainAxisSpacing: 10,
+                    childAspectRatio: 1 / 1.7,
+                    crossAxisSpacing: 10,
+                    children: scannedProducts.map((product) {
+                      return ProductCard(
+                        productName: product['name'],
+                        productImage: product['image'],
+                        productBrand: product['brand'],
+                        productQuantitiy: product['quantity'],
+                      );
+                    }).toList(),
+                  ),
+                )
+              ],
             ),
           ),
         ],

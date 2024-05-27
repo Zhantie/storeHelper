@@ -28,6 +28,8 @@ dependencies:
   openfoodfacts: ^3.8.0
   flutter_barcode_scanner: ^2.0.0
   font_awesome_flutter: ^10.7.0
+  auto_size_text: ^3.0.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -42,7 +44,6 @@ flutter:
     - assets/
     - assets/icons/
     - assets/images/
-    
 
   fonts:
     - family: Poppins
