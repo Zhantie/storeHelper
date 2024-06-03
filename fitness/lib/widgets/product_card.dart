@@ -8,12 +8,12 @@ class ProductCard extends StatelessWidget {
   final String? productQuantitiy;
 
   const ProductCard({
-    Key? key,
+    super.key,
     this.productName,
     this.productImage,
     this.productBrand,
     this.productQuantitiy,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +28,18 @@ class ProductCard extends StatelessWidget {
         children: [
           Expanded(
             flex: 4,  
-            child: ClipRRect(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(
-                  10.0,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(
+                    10.0,
+                  ),
                 ),
-                topRight: Radius.circular(
-                  10.0,
+                child: Image.network(
+                  productImage!,
+                  fit: BoxFit.cover,
                 ),
-              ),
-              child: Image.network(
-                productImage!,
-                fit: BoxFit.cover,
               ),
             ),
           ),

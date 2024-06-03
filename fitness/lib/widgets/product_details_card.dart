@@ -40,7 +40,16 @@ class ProductDetailsCard extends StatelessWidget {
               ),
             )
           else
-            Text('No product scanned'),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Text(
+                'No product scanned',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Theme.of(context).colorScheme.secondary.withAlpha(150),
+                ),
+              ),
+            ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(

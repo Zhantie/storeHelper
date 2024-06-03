@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
 
 class AllergenAlert {
-  static void show(BuildContext context, String allergen) {
+  static void show(BuildContext context, String allergen, String productName) {
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Waarschuwing!'),
-          content: Text('Dit product bevat allergenen: $allergen'),
+          title: Row(
+            children: [
+              const Text('Allergen Detected!'),
+              const SizedBox(
+                width: 10,
+              ),
+              Icon(
+                Icons.warning_rounded,
+                color: Theme.of(context).colorScheme.error,
+              ),
+            ],
+          ),
+          content: Text('$productName contains $allergen'),
           actions: [
             TextButton(
               onPressed: () {

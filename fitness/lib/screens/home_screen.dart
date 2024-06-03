@@ -90,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  void showAllergenAlert(String allergen) {
-    AllergenAlert.show(context, allergen);
+  void showAllergenAlert(String allergen,) {
+    AllergenAlert.show(context, allergen, productName!);
   }
 
   void handleSelectionChanged(List<String> selected) {
